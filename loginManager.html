@@ -1,0 +1,300 @@
+<!--
+    Archivo: loginManager.html
+    Descripción: Formulario web para el registro, búsqueda, actualización y guardado de usuarios.
+    Incluye campos: id, userName, password, email, isActive, documentId, age, firstName, lastName, address.
+    Usa Bootstrap para estilos y JavaScript para la lógica de interacción.
+-->
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Login Manager</title>
+                <!--
+                    Se importa Bootstrap desde CDN para aplicar estilos modernos y responsivos al formulario.
+                -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+                <!--
+                    Estilos personalizados para el fondo, tarjetas y formularios.
+                    Puedes modificar estos estilos para cambiar la apariencia visual.
+                -->
+                <style>
+            body {
+                background-color: #f4f6fb;
+                min-height: 100vh;
+            }
+            .login-card {
+                border: 0;
+                border-radius: 1rem;
+                box-shadow: 0 0.75rem 1.5rem rgba(84, 104, 149, 0.18);
+            }
+            .form-label {
+                font-weight: 600;
+            }
+            .form-section {
+                background-color: #ffffff;
+                padding: 1.5rem;
+                border-radius: 0.85rem;
+            }
+        </style>
+    </head>
+<body>
+        <!--
+            Contenedor principal centrado con padding vertical.
+            Utiliza el sistema de grillas de Bootstrap para centrar el formulario.
+        -->
+        <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 col-xl-6">
+                <div class="card login-card overflow-hidden">
+                    <div class="card-body p-4 form-section">
+                        <div class="text-center mb-4">
+                            <h2 class="mb-1">Account Manager</h2>
+                            <p class="text-secondary mb-0">Registro y administración de usuarios</p>
+                        </div>
+                                                <!--
+                                                    Formulario de usuario con validación de campos requeridos.
+                                                    Incluye campos para datos básicos y personales.
+                                                -->
+                                                <form id="userForm">
+                            <div class="row g-3 mb-3">
+                                <div class="col-md-6">
+                                    <label for="id" class="form-label">ID <span class="text-danger">*</span></label>
+                                    <!-- Campo para el ID único del usuario. Se genera automáticamente al cargar la página. -->
+                                    <input type="text" id="id" name="id" class="form-control" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="userName" class="form-label">Username <span class="text-danger">*</span></label>
+                                    <!-- Campo para el nombre de usuario. Obligatorio. -->
+                                    <input type="text" id="userName" name="userName" class="form-control" required>
+                                </div>
+                            </div>
+                            <div class="row g-3 mb-3">
+                                <div class="col-md-6">
+                                    <label for="password" class="form-label">Password <span class="text-danger">*</span></label>
+                                    <!-- Campo para la contraseña del usuario. Obligatorio. -->
+                                    <input type="password" id="password" name="password" class="form-control" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="email" class="form-label">Email <span class="text-danger">*</span></label>
+                                    <!-- Campo para el correo electrónico del usuario. Obligatorio. -->
+                                    <input type="email" id="email" name="email" class="form-control" required>
+                                </div>
+                            </div>
+                            <div class="row g-3 mb-4">
+                                <div class="col-md-6">
+                                    <label for="isActived" class="form-label">Activo</label>
+                                    <!-- Selector para indicar si el usuario está activo o no. -->
+                                    <select id="isActived" name="isActived" class="form-select">
+                                        <option value="true">Si</option>
+                                        <option value="false">No</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <hr class="my-4">
+                            <h5 class="mb-3 text-capitalize">Información personal</h5>
+                            <div class="row g-3 mb-3">
+                                <div class="col-md-6">
+                                    <label for="documentId" class="form-label">Cédula</label>
+                                    <!-- Campo para la cédula o documento de identidad del usuario. -->
+                                    <input type="text" id="documentId" name="documentId" class="form-control">
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="age" class="form-label">Edad</label>
+                                    <!-- Campo para la edad del usuario. -->
+                                    <input type="number" id="age" name="age" class="form-control">
+                                </div>
+                            </div>
+                            <div class="row g-3 mb-3">
+                                <div class="col-md-6">
+                                    <label for="firstName" class="form-label">Nombre <span class="text-danger">*</span></label>
+                                    <!-- Campo para el nombre del usuario. Obligatorio. -->
+                                    <input type="text" id="firstName" name="firstName" class="form-control" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="lastName" class="form-label">Apellido <span class="text-danger">*</span></label>
+                                    <!-- Campo para el apellido del usuario. Obligatorio. -->
+                                    <input type="text" id="lastName" name="lastName" class="form-control" required>
+                                </div>
+                            </div>
+                            <div class="row g-3 mb-4">
+                                <div class="col-12">
+                                    <label for="address" class="form-label">Dirección</label>
+                                    <!-- Campo para la dirección del usuario. -->
+                                    <input type="text" id="address" name="address" class="form-control">
+                                </div>
+                            </div>
+                            <div class="row g-3 mb-3">
+                                <div class="col-md-3 d-grid">
+                                    <!-- Botón para buscar usuario por cédula/documento. -->
+                                    <button type="button" id="searchDocBtn" class="btn btn-info btn-lg">Buscar</button>
+                                </div>
+                                <div class="col-md-3 d-grid">
+                                    <!-- Botón para registrar un nuevo usuario. Llama a la función handleRegister(). -->
+                                    <button type="button" id="registerBtn" class="btn btn-primary btn-lg">Registrar</button>
+                                </div>
+                                <div class="col-md-3 d-grid">
+                                    <!-- Botón para guardar los datos del usuario. Llama a la función handleSave(). -->
+                                    <button type="button" id="saveBtn" class="btn btn-success btn-lg">Guardar</button>
+                                </div>
+                                <div class="col-md-3 d-grid">
+                                    <!-- Botón para actualizar los datos de un usuario existente. Llama a la función handleUpdate(). -->
+                                    <button type="button" id="updateBtn" class="btn btn-outline-secondary btn-lg">Actualizar</button>
+                                </div>
+                            </div>
+                            <div class="text-center text-muted">
+                                <small><span class="text-danger">*</span> Campos obligatorios</small>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<!--
+    Se importa el archivo funsiones.js donde están definidas las funciones para manipular usuarios.
+-->
+<script src="./src/js/funsiones.js"></script>
+<script>
+    /**
+     * Obtiene todos los valores de los campos del formulario y los retorna como un objeto.
+     * Útil para pasar los datos a las funciones de registro, guardado o actualización.
+     */
+    function getFormData() {
+        return {
+            id: document.getElementById("id").value,
+            userName: document.getElementById("userName").value,
+            email: document.getElementById("email").value,
+            password: document.getElementById("password").value,
+            isActive: document.getElementById("isActived").value,
+            firstName: document.getElementById("firstName").value,
+            lastName: document.getElementById("lastName").value,
+            age: document.getElementById("age").value,
+            address: document.getElementById("address").value,
+            documentId: document.getElementById("documentId").value
+        };
+    }
+
+    /**
+     * Valida que los campos obligatorios del formulario estén completos.
+     * Si falta alguno, muestra una alerta y retorna false.
+     * @param {Object} data - Objeto con los datos del formulario.
+     * @returns {boolean} true si todos los campos requeridos están completos, false si falta alguno.
+     */
+    function validateFormData(data) {
+        if (!data.id || !data.userName || !data.email || !data.password || !data.firstName || !data.lastName) {
+            alert('Por favor complete todos los campos requeridos');
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Maneja el evento de registro de usuario.
+     * 1. Obtiene los datos del formulario.
+     * 2. Valida los datos.
+     * 3. Llama a addUser para agregar el usuario.
+     * 4. Muestra alerta de éxito y muestra los usuarios en consola.
+     */
+    // Función resumida para registrar usuarios
+    const handleRegister = () => {
+        const d = getFormData();
+        if (validateFormData(d)) {
+            addUser(d.id, d.userName, d.email, d.password, d.isActive, d.firstName, d.lastName, d.age, d.address, d.documentId);
+            alert('Usuario registrado correctamente'); console.log('Usuarios:', users);
+        }
+    };
+
+    /**
+     * Maneja el evento de guardado de usuario.
+     * Similar a handleRegister, pero llama a saveUser.
+     * Muestra alerta de éxito y los usuarios en consola.
+     */
+    function handleSave() {
+        const data = getFormData();
+        if (!validateFormData(data)) {
+            return;
+        }
+        saveUser(data.id, data.userName, data.email, data.password, data.isActive, data.firstName, data.lastName, data.age, data.address, data.documentId);
+        alert('Datos guardados correctamente');
+        console.log('Usuarios:', users);
+    }
+
+    /**
+     * Maneja el evento de actualización de usuario.
+     * 1. Obtiene los datos del formulario.
+     * 2. Valida los datos.
+     * 3. Llama a updateUser para actualizar el usuario.
+     * 4. Si no existe el usuario, muestra alerta de error.
+     * 5. Si se actualiza, muestra alerta de éxito y los usuarios en consola.
+     */
+    function handleUpdate() {
+        const data = getFormData();
+        if (!validateFormData(data)) {
+            return;
+        }
+        const updated = updateUser(data.id, data.userName, data.email, data.password, data.isActive, data.firstName, data.lastName, data.age, data.address, data.documentId);
+        if (!updated) {
+            alert('Usuario no encontrado. Verifique el ID e intente de nuevo.');
+            return;
+        }
+        alert('Usuario actualizado correctamente');
+        console.log('Usuarios:', users);
+    }
+
+    /**
+     * Llena el formulario con los datos de un usuario encontrado.
+     * @param {Object} user - Objeto usuario con la estructura esperada.
+     * Ejemplo de uso:
+     *   fillForm({ id: "1", userName: "juan", ... , personalInfo: { documentId: "123", ... } })
+     */
+    function fillForm(user) {
+        document.getElementById("id").value = user.id;
+        document.getElementById("userName").value = user.userName;
+        document.getElementById("email").value = user.email;
+        document.getElementById("password").value = user.password;
+        document.getElementById("isActived").value = user.isActive ? 'true' : 'false';
+        document.getElementById("documentId").value = user.personalInfo.documentId;
+        document.getElementById("age").value = user.personalInfo.age;
+        document.getElementById("firstName").value = user.personalInfo.firstName;
+        document.getElementById("lastName").value = user.personalInfo.lastName;
+        document.getElementById("address").value = user.personalInfo.address;
+    }
+
+    /**
+     * Busca un usuario por cédula/documento y llena el formulario si lo encuentra.
+     * Si no se encuentra, muestra una alerta.
+     */
+    function handleSearchByDocumentId() {
+        const documentId = document.getElementById("documentId").value.trim();
+        if (!documentId) {
+            alert('Ingrese la cédula para buscar');
+            return;
+        }
+        const user = findUserByDocumentId(documentId);
+        if (!user) {
+            alert('No se encontró ningún usuario con esa cédula');
+            return;
+        }
+        fillForm(user);
+        alert('Usuario encontrado y cargado en el formulario');
+    }
+
+    // Asocia el evento click de cada botón con su función correspondiente.
+    // Cuando el usuario hace clic en un botón, se ejecuta la función indicada.
+    document.getElementById('registerBtn').addEventListener('click', handleRegister);
+    document.getElementById('saveBtn').addEventListener('click', handleSave);
+    document.getElementById('updateBtn').addEventListener('click', handleUpdate);
+    document.getElementById('searchDocBtn').addEventListener('click', handleSearchByDocumentId);
+
+    /**
+     * Genera un ID aleatorio para el campo id del formulario.
+     * El ID es un número entre 0 y 999999 convertido a string.
+     * Se asigna automáticamente al cargar la página para evitar duplicados.
+     */
+    function generateRandomId() {
+        return Math.floor(Math.random() * 1000000).toString();
+    }
+    // Al cargar la página, se asigna un ID aleatorio al campo id.
+    document.getElementById("id").value = generateRandomId();
+</script>
+</html>

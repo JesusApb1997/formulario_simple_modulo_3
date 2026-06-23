@@ -1,0 +1,30 @@
+[
+    {
+        "id": "1001",
+        "userName": "JesusAle",
+        "email": "jesusapb1997@gmail.com",
+        "password": "2554",
+        "isActive": true,
+        "personalInfo": {
+            "documentId": "25545537",
+            "age": 28,
+            "firstName": "Jesus",
+            "lastName": "Perez",
+            "address": "Macarao"
+        }
+    },
+    {
+        "id": "1002",
+        "userName": "asmith",
+        "email": "asmith@example.com",
+        "password": "123",
+        "isActive": true,
+        "personalInfo": {
+            "documentId": "87654321",
+            "age": 30,
+            "firstName": "Anna",
+            "lastName": "Smith",
+            "address": "Second St 2"
+        }
+    }
+]
